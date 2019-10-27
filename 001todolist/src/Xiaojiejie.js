@@ -1,5 +1,6 @@
 import React, { Component, Fragment} from 'react';
 import './App.css';
+import Xiaojiejieitem from './Xiaojiejieitem'
 
 class Xiaojiejie extends Component {
     //js的构造函数，由于其他任何函数执行
@@ -22,14 +23,20 @@ class Xiaojiejie extends Component {
             <ul>
                 {
                     this.state.list.map((item,index)=>{
-                        return <li 
-                        key={index + item}
-                        onClick={this.deleteItem.bind(this,index)}
-                        dangerouslySetInnerHTML={{ __html: item }}
-                        > 
-                           
-                            {/* <span className='txtred'> 删除</span> */}
-                        </li>
+                        return (
+                        
+                                <Xiaojiejieitem content={item} key={index + item}  
+                                    // avname={'韩老师'}
+                                    index={index}
+                                    list={this.state.list}
+                                    deleteItem={this.deleteItem.bind(this)}
+                                    //关键代码——----------start
+                                    ref={(input) => { this.input = input }}
+                                    //关键代码------------end
+                                />
+                         
+
+                        )
                     })
                 }
             </ul>    
@@ -41,13 +48,21 @@ class Xiaojiejie extends Component {
         console.log(e.target.value);
         // this.state.inputValue = e.target.value;
         this.setState({
-            inputValue: e.target.value
+            // inputValue: e.target.value
+            inputValue: this.input.value
         })
+
     }
     //增加服务的按钮响应方法
     addList() {
+        let txtval = this.state.inputValue;
+        if (txtval.trim() === '') {
+            alert('输入框不能为空')
+            return
+        }
         this.setState({
-            list: [...this.state.list, this.state.inputValue]
+            list: [...this.state.list, this.state.inputValue],
+            inputValue:''
         })
 
     }
